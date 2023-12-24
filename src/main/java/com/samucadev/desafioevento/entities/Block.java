@@ -3,6 +3,7 @@ package com.samucadev.desafioevento.entities;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @Table(name = "tb_block")
@@ -62,5 +63,20 @@ public class Block {
 
     public void setActivity(Activity activity) {
         this.activity = activity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Block block = (Block) o;
+
+        return Objects.equals(id, block.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

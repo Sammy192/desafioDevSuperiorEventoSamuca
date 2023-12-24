@@ -2,8 +2,7 @@ package com.samucadev.desafioevento.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_activity")
@@ -14,6 +13,7 @@ public class Activity {
     private Integer id;
 
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Double price;
 
@@ -23,6 +23,12 @@ public class Activity {
 
     @OneToMany(mappedBy = "activity")
     private List<Block> blocks = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(name = "tb_activity_participant",
+            joinColumns = @JoinColumn(name = "activity_id"),
+            inverseJoinColumns = @JoinColumn(name = "participant_id"))
+    private Set<Participant> participants = new HashSet<>();
 
     public Activity() {
     }
@@ -77,5 +83,24 @@ public class Activity {
 
     public List<Block> getBlocks() {
         return blocks;
+    }
+
+    public Set<Participant> getParticipants() {
+        return participants;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Activity activity = (Activity) o;
+
+        return Objects.equals(id, activity.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }
